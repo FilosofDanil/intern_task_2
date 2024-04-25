@@ -19,15 +19,20 @@ import java.util.Date;
 public class Employee extends BaseEntity {
     @Column(name = "employee_name")
     String name;
+
     @Column(name = "employee_name")
     String surname;
+
     @Column(name = "salary")
     Integer salary;
+
     @Column(name = "hiring_date")
-    private Date hiringDate;
+    Date hiringDate;
+
     @Column(name = "job")
     @Enumerated(EnumType.STRING)
-    private Jobs job;
+    Jobs job;
+
     @ManyToOne
     @JoinColumn(name = "company_id", nullable = false)
     Company company;
