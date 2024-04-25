@@ -4,7 +4,7 @@ import com.example.demo.dtos.CompanyDTO;
 import com.example.demo.entities.Company;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", implementationName = "companyMapper")
 public interface CompanyMapper {
     CompanyDTO toDto(Company company);
 

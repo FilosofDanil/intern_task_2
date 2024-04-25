@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "employees")
@@ -20,14 +20,14 @@ public class Employee extends BaseEntity {
     @Column(name = "employee_name")
     String name;
 
-    @Column(name = "employee_name")
+    @Column(name = "employee_surname")
     String surname;
 
     @Column(name = "salary")
     Integer salary;
 
     @Column(name = "hiring_date")
-    Date hiringDate;
+    LocalDate hiringDate;
 
     @Column(name = "job")
     @Enumerated(EnumType.STRING)
