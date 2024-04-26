@@ -9,6 +9,7 @@ import com.example.demo.services.CRUDService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +18,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CRUDCompanyService implements CRUDService<CompanyDTO> {
     CompanyMapper companyMapper;
@@ -25,6 +27,7 @@ public class CRUDCompanyService implements CRUDService<CompanyDTO> {
 
     @Override
     public List<CompanyDTO> getAll() {
+        log.info("Getting all companies");
         return companyRepository.findAll()
                 .stream()
                 .map(companyMapper::toDto)
@@ -33,12 +36,14 @@ public class CRUDCompanyService implements CRUDService<CompanyDTO> {
 
     @Override
     public CompanyDTO getById(Long id) {
+        log.info("Getting company by by id: {}", id);
         Optional<Company> company = companyRepository.findById(id);
         return company.map(companyMapper::toDto).get();
     }
 
     @Override
     public CompanyDTO create(CompanyDTO companyDTO) {
+        log.info("Creating new company.");
         companyRepository.save(companyMapper.toEntity(companyDTO));
         return companyDTO;
     }
@@ -46,6 +51,7 @@ public class CRUDCompanyService implements CRUDService<CompanyDTO> {
     @Transactional
     @Override
     public void update(CompanyDTO companyDTO, Long id) {
+        log.info("Updating company with id: {}", id);
         Company company= companyMapper.toEntity(companyDTO);
         companyRepository.updateCompany(id, company.getName(),
                 company.getCountry(), company.getFoundationDate());
@@ -53,6 +59,7 @@ public class CRUDCompanyService implements CRUDService<CompanyDTO> {
 
     @Override
     public void delete(Long id) {
+        log.info("Deleting company with id: {}", id);
         companyRepository.deleteById(id);
     }
 }
