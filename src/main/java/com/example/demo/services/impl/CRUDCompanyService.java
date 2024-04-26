@@ -10,6 +10,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -42,9 +43,12 @@ public class CRUDCompanyService implements CRUDService<CompanyDTO> {
         return companyDTO;
     }
 
+    @Transactional
     @Override
     public void update(CompanyDTO companyDTO, Long id) {
-        //TODO Implement update method
+        Company company= companyMapper.toEntity(companyDTO);
+        companyRepository.updateCompany(id, company.getName(),
+                company.getCountry(), company.getFoundationDate());
     }
 
     @Override
