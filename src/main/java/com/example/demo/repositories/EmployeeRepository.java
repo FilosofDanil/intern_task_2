@@ -18,7 +18,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
             "    salary = CASE WHEN :salary IS NOT NULL THEN :salary ELSE salary END," +
             "    hiring_date = CASE WHEN :hiringDate IS NOT NULL THEN :hiringDate ELSE hiring_date END," +
             "    job = CASE WHEN :job IS NOT NULL THEN :job ELSE job END," +
-            "    company_id = CASE WHEN :companyId IS NOT NULL THEN :companyId ELSE company_id END " +
+            "    company_id = CASE WHEN :companyName IS NOT NULL" +
+            " THEN (SELECT id FROM companies WHERE company_name = :companyName) ELSE company_id END " +
             "WHERE id = :id",
             nativeQuery = true)
     void updateEmployee(@Param("id") Long id,
@@ -27,5 +28,21 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
                         @Param("salary") Integer salary,
                         @Param("hiringDate") LocalDate hiringDate,
                         @Param("job") String job,
-                        @Param("companyId") Long companyId);
+                        @Param("companyId") String companyName);
+
+    @Modifying
+    @Query(value = "WITH inserted_employee AS (\n" +
+            "    INSERT INTO employees (id, employee_name, employee_surname, salary, hiring_date, job, company_id)\n" +
+            "    VALUES" +
+            "        (nextval('employees_seq'), :name, :surname, :salary, :hiringDate, :job, " +
+            "(SELECT id FROM companies WHERE company_name = :companyName))" +
+            "    RETURNING *" +
+            ")" +
+            "SELECT * FROM inserted_employee;", nativeQuery = true)
+    Employee insertEmployee(@Param("name") String name,
+                            @Param("surname") String surname,
+                            @Param("salary") Integer salary,
+                            @Param("hiringDate") LocalDate hiringDate,
+                            @Param("job") String job,
+                            @Param("companyName") String companyName);
 }

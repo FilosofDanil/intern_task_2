@@ -1,14 +1,16 @@
 package com.example.demo.controller;
 
-import com.example.demo.dtos.CompanyDTO;
 import com.example.demo.dtos.EmployeeDTO;
+import com.example.demo.dtos.Statistic;
 import com.example.demo.services.CRUDService;
+import com.example.demo.services.EmployeeService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -18,6 +20,8 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class EmployeeController {
     CRUDService<EmployeeDTO> employeeCrudService;
+
+    EmployeeService employeeService;
 
     @GetMapping("")
     public ResponseEntity<List<EmployeeDTO>> getAllEmployees() {
@@ -35,9 +39,24 @@ public class EmployeeController {
                 .body(employeeCrudService.create(employeeDTO));
     }
 
+    @PostMapping("/upload")
+    public ResponseEntity<Statistic> uploadEmployee(@RequestParam("file") MultipartFile file) {
+        return ResponseEntity.ok(employeeService.uploadEmployeeJSON(file));
+    }
+
+    @GetMapping("/_list")
+    public void getAllEmployeesWithPagination() {
+        //TODO Implement list with filters and pagination
+    }
+
+    @GetMapping("/_report")
+    public void getAllEmployeesRepost() {
+        //TODO Implement report uploading
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateEmployee(@PathVariable("id") Long id,
-                                              @RequestBody EmployeeDTO employeeDTO) {
+                                               @RequestBody EmployeeDTO employeeDTO) {
         employeeCrudService.update(employeeDTO, id);
         return ResponseEntity.status(HttpStatus.OK)
                 .build();

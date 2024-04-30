@@ -2,7 +2,8 @@ package com.example.demo.services.impl;
 
 import com.example.demo.dtos.CompanyDTO;
 import com.example.demo.entities.Company;
-import com.example.demo.entities.Employee;
+import com.example.demo.exceptions.NoContentPresentException;
+import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.mappers.CompanyMapper;
 import com.example.demo.repositories.CompanyRepository;
 import com.example.demo.services.CRUDService;
@@ -38,6 +39,9 @@ public class CRUDCompanyService implements CRUDService<CompanyDTO> {
     public CompanyDTO getById(Long id) {
         log.info("Getting company by by id: {}", id);
         Optional<Company> company = companyRepository.findById(id);
+        if (company.isEmpty()) {
+            throw new ResourceNotFoundException("Cannot find company with id: " + id);
+        }
         return company.map(companyMapper::toDto).get();
     }
 
@@ -52,6 +56,9 @@ public class CRUDCompanyService implements CRUDService<CompanyDTO> {
     @Override
     public void update(CompanyDTO companyDTO, Long id) {
         log.info("Updating company with id: {}", id);
+        if (!companyRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Cannot find company with id: " + id);
+        }
         Company company= companyMapper.toEntity(companyDTO);
         companyRepository.updateCompany(id, company.getName(),
                 company.getCountry(), company.getFoundationDate());
@@ -60,6 +67,9 @@ public class CRUDCompanyService implements CRUDService<CompanyDTO> {
     @Override
     public void delete(Long id) {
         log.info("Deleting company with id: {}", id);
+        if (!companyRepository.existsById(id)) {
+            throw new NoContentPresentException("No content present with id: " + id);
+        }
         companyRepository.deleteById(id);
     }
 }
