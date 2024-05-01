@@ -17,19 +17,19 @@ import java.time.LocalDate;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Employee extends BaseEntity {
-    @Column(name = "employee_name")
+    @Column(name = "employee_name", nullable = false)
     String name;
 
-    @Column(name = "employee_surname")
+    @Column(name = "employee_surname", nullable = false)
     String surname;
 
-    @Column(name = "salary")
+    @Column(name = "salary", nullable = false)
     Integer salary;
 
     @Column(name = "hiring_date")
     LocalDate hiringDate;
 
-    @Column(name = "job")
+    @Column(name = "job", nullable = false)
     @Enumerated(EnumType.STRING)
     Jobs job;
 

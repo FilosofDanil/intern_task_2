@@ -19,7 +19,7 @@ import java.util.List;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Company extends BaseEntity {
-    @Column(name = "company_name", unique = true)
+    @Column(name = "company_name", unique = true, nullable = false)
     String name;
 
     @Column(name = "country")

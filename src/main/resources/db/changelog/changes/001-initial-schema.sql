@@ -12,7 +12,7 @@ CREATE TYPE jobs AS ENUM (
 CREATE TABLE companies (
 
                            id BIGINT NOT NULL,
-                           company_name VARCHAR(255),
+                           company_name VARCHAR(255) UNIQUE NOT NULL ,
                            country VARCHAR(255),
                            foundation_date DATE,
                            PRIMARY KEY (id)
@@ -20,11 +20,11 @@ CREATE TABLE companies (
 
 CREATE TABLE employees (
                            id BIGINT NOT NULL,
-                           employee_name VARCHAR(255),
-                           employee_surname VARCHAR(255),
-                           salary INTEGER,
+                           employee_name VARCHAR(255) NOT NULL ,
+                           employee_surname VARCHAR(255) NOT NULL ,
+                           salary INTEGER NOT NULL ,
                            hiring_date DATE,
-                           job VARCHAR(255),
+                           job VARCHAR(255) NOT NULL ,
                            company_id BIGINT NOT NULL,
                            PRIMARY KEY (id),
                            CONSTRAINT fk_company_id FOREIGN KEY (company_id) REFERENCES companies(id)
@@ -40,6 +40,8 @@ ALTER TABLE companies
 ALTER TABLE employees
     ALTER COLUMN id SET DEFAULT nextval('employee_seq'::regclass);
 
-
+CREATE INDEX idx_company_id ON employees(company_id);
+CREATE INDEX idx_employee_name ON employees(employee_name);
+CREATE INDEX idx_employee_surname ON employees(employee_surname);
 
 
