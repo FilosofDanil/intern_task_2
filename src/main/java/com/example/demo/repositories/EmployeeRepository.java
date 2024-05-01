@@ -28,13 +28,12 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
                         @Param("salary") Integer salary,
                         @Param("hiringDate") LocalDate hiringDate,
                         @Param("job") String job,
-                        @Param("companyId") String companyName);
+                        @Param("companyName") String companyName);
 
-    @Modifying
-    @Query(value = "WITH inserted_employee AS (\n" +
-            "    INSERT INTO employees (id, employee_name, employee_surname, salary, hiring_date, job, company_id)\n" +
+    @Query(value = "WITH inserted_employee AS (" +
+            "    INSERT INTO employees (id, employee_name, employee_surname, salary, hiring_date, job, company_id)" +
             "    VALUES" +
-            "        (nextval('employees_seq'), :name, :surname, :salary, :hiringDate, :job, " +
+            "        (nextval('employee_seq'), :name, :surname, :salary, :hiringDate, :job, " +
             "(SELECT id FROM companies WHERE company_name = :companyName))" +
             "    RETURNING *" +
             ")" +
@@ -45,4 +44,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
                             @Param("hiringDate") LocalDate hiringDate,
                             @Param("job") String job,
                             @Param("companyName") String companyName);
+
+
 }

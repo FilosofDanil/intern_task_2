@@ -34,6 +34,7 @@ public class EmployeeMapperImpl implements EmployeeMapper {
         employeeDTO.setHiringDate(employee.getHiringDate() != null ? employee.getHiringDate().format(DATE_FORMATTER) : null);
         employeeDTO.setJob(employee.getJob() != null ? employee.getJob().toString() : null);
         employeeDTO.setCompany(employee.getCompany() != null ? companyMapper.toDto(employee.getCompany()) : null);
+        employeeDTO.setSelfLink(idToLink(employee.getId()));
 
         return employeeDTO;
     }

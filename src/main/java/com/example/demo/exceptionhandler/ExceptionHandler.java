@@ -13,12 +13,13 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 @RestControllerAdvice
-public class ExceptionHandler  extends ResponseEntityExceptionHandler {
+public class ExceptionHandler extends ResponseEntityExceptionHandler {
     @org.springframework.web.bind.annotation.ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundException ex) {
         return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
@@ -45,7 +46,6 @@ public class ExceptionHandler  extends ResponseEntityExceptionHandler {
     }
 
 
-
     private ResponseEntity<Object> buildResponseEntity(HttpStatus status, String message) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());
@@ -57,21 +57,21 @@ public class ExceptionHandler  extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException ex,
-            HttpHeaders headers,
-            HttpStatusCode status,
-            WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 
         BindingResult result = ex.getBindingResult();
         List<FieldError> fieldErrors = result.getFieldErrors();
-
-        StringBuilder errorMessage = new StringBuilder("Validation failed for: ");
+        Map<String, Object> responseBody = new LinkedHashMap<>();
+        List<String> errors = new ArrayList<>();
 
         for (FieldError fieldError : fieldErrors) {
-            errorMessage.append(fieldError.getField()).append(" - ").append(fieldError.getDefaultMessage()).append("; ");
+            String errorMessage = fieldError.getField() + " - " + fieldError.getDefaultMessage();
+            errors.add(errorMessage);
         }
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage.toString());
+        responseBody.put("message", "Validation failed");
+        responseBody.put("cause", errors);
+
+        return ResponseEntity.status(status).body(responseBody);
     }
 }

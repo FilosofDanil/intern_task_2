@@ -3,9 +3,11 @@ package com.example.demo.services.impl;
 import com.example.demo.dtos.EmployeeDTO;
 import com.example.demo.entities.Company;
 import com.example.demo.entities.Employee;
+import com.example.demo.exceptions.CompanyNotFoundException;
 import com.example.demo.exceptions.NoContentPresentException;
 import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.mappers.EmployeeMapper;
+import com.example.demo.repositories.CompanyRepository;
 import com.example.demo.repositories.EmployeeRepository;
 import com.example.demo.services.CRUDService;
 import lombok.AccessLevel;
@@ -27,6 +29,8 @@ public class CRUDEmployeeService implements CRUDService<EmployeeDTO> {
 
     EmployeeRepository employeeRepository;
 
+    CompanyRepository companyRepository;
+
     @Override
     public List<EmployeeDTO> getAll() {
         log.info("Getting all employees");
@@ -46,10 +50,15 @@ public class CRUDEmployeeService implements CRUDService<EmployeeDTO> {
         return employee.map(employeeMapper::toDto).get();
     }
 
+    @Transactional
     @Override
     public EmployeeDTO create(EmployeeDTO employeeDTO) {
         log.info("Creating new employee.");
         Employee employee = employeeMapper.toEntity(employeeDTO);
+        if(!companyRepository.existsByName(employee.getCompany().getName())){
+            throw new CompanyNotFoundException("Provided company is not exist. Operation has aborted");
+        }
+
         Employee savedEmployee = employeeRepository.insertEmployee(employee.getName(), employee.getSurname(),
                 employee.getSalary(), employee.getHiringDate(), employee.getJob().toString(),
                 employee.getCompany().getName());
@@ -64,7 +73,12 @@ public class CRUDEmployeeService implements CRUDService<EmployeeDTO> {
             throw new ResourceNotFoundException("Cannot find employee with id: " + id);
         }
         Employee employee = employeeMapper.toEntity(employeeDTO);
-        Optional<Company> company = Optional.of(employee.getCompany());
+        Optional<Company> company = Optional.ofNullable(employee.getCompany());
+        if(company.isPresent()){
+            if(!companyRepository.existsByName(company.get().getName())){
+                throw new CompanyNotFoundException("Provided company is not exist. Operation has aborted");
+            }
+        }
         employeeRepository.updateEmployee(id, employee.getName(), employee.getSurname(),
                 employee.getSalary(), employee.getHiringDate(), employeeDTO.getJob(),
                 company.map(Company::getName).orElse(null));

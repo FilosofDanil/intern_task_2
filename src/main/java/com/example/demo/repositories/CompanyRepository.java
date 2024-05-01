@@ -14,6 +14,8 @@ import java.util.Optional;
 public interface CompanyRepository extends JpaRepository<Company, Long> {
     Optional<Company> findByName(String name);
 
+    boolean existsByName(String name);
+
     @Modifying
     @Query(value = "UPDATE companies SET company_name = CASE WHEN :name IS NOT NULL THEN :name ELSE company_name END," +
             "    country = CASE WHEN :country IS NOT NULL THEN :country ELSE country END," +

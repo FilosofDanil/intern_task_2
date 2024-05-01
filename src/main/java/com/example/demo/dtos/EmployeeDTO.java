@@ -24,4 +24,5 @@ public class EmployeeDTO {
     String job;
     @NotNull(message = "Company may not be null")
     CompanyDTO company;
+    String selfLink;
 }
