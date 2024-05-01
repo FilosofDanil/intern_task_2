@@ -6,6 +6,7 @@ import com.example.demo.services.ReportGenerator;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.poi.ss.usermodel.Cell;
@@ -24,11 +25,12 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-public class RepostGeneratorImpl implements ReportGenerator {
+public class ReportGeneratorImpl implements ReportGenerator {
     EmployeeRepository employeeRepository;
 
-    public ByteArrayInputStream employeesToCsv() throws IOException {
+    public ByteArrayInputStream generateReport()  {
         final CSVFormat format = CSVFormat.DEFAULT.withQuoteMode(CSVFormat.EXCEL.getQuoteMode());
         List<Employee> employees = employeeRepository.findAll();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -46,41 +48,9 @@ public class RepostGeneratorImpl implements ReportGenerator {
             }
 
             csvPrinter.flush();
+        } catch (IOException e) {
+            log.error("Something went wrong on server. " + e.getMessage());
         }
-
         return new ByteArrayInputStream(out.toByteArray());
-    }
-
-    @Override
-    public ByteArrayInputStream employeesToExcel() throws IOException {
-        List<Employee> employees = employeeRepository.findAll();
-        try (Workbook workbook = new XSSFWorkbook()) {
-            Sheet sheet = workbook.createSheet("Employees");
-            Row headerRow = sheet.createRow(0);
-            String[] columns = {"Name", "Surname", "Salary", "Hiring Date", "Job", "Company"};
-            for (int i = 0; i < columns.length; i++) {
-                Cell cell = headerRow.createCell(i);
-                cell.setCellValue(columns[i]);
-            }
-
-            int rowNum = 1;
-            for (Employee employee : employees) {
-                Row row = sheet.createRow(rowNum++);
-
-                row.createCell(0).setCellValue(employee.getName());
-                row.createCell(1).setCellValue(employee.getSurname());
-                row.createCell(2).setCellValue(employee.getSalary());
-                row.createCell(3).setCellValue(employee.getHiringDate().toString());
-                row.createCell(4).setCellValue(employee.getJob().toString());
-                row.createCell(5).setCellValue(employee.getCompany().getName());
-            }
-
-            for (int i = 0; i < columns.length; i++) {
-                sheet.autoSizeColumn(i);
-            }
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            workbook.write(out);
-            return new ByteArrayInputStream(out.toByteArray());
-        }
     }
 }

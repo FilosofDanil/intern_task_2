@@ -1,7 +1,8 @@
 package com.example.demo.repositories;
 
 import com.example.demo.entities.Employee;
-import com.example.demo.enums.Jobs;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -45,5 +46,16 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
                             @Param("job") String job,
                             @Param("companyName") String companyName);
 
-
+    @Query("SELECT e FROM Employee e " +
+            "WHERE (:companyId IS NULL OR e.company.id = :companyId) " +
+            "AND (:name IS NULL OR e.name = :name) " +
+            "AND (:surname IS NULL OR e.surname = :surname) " +
+            "AND (:salary IS NULL OR e.salary = :salary)")
+    Page<Employee> getAllEmployeePages(
+            @Param("companyId") Long companyId,
+            @Param("name") String name,
+            @Param("surname") String surname,
+            @Param("salary") Long salary,
+            Pageable pageable
+    );
 }

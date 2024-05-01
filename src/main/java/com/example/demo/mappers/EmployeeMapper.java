@@ -1,6 +1,6 @@
 package com.example.demo.mappers;
 
-import com.example.demo.dtos.EmployeeDTO;
+import com.example.demo.dtos.employee.EmployeeDTO;
 import com.example.demo.entities.Employee;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

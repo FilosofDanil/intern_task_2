@@ -1,6 +1,6 @@
 package com.example.demo.services.impl;
 
-import com.example.demo.dtos.EmployeeDTO;
+import com.example.demo.dtos.employee.EmployeeDTO;
 import com.example.demo.entities.Company;
 import com.example.demo.entities.Employee;
 import com.example.demo.exceptions.CompanyNotFoundException;

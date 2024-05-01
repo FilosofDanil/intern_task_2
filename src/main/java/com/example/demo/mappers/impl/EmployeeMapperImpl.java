@@ -1,6 +1,8 @@
 package com.example.demo.mappers.impl;
 
-import com.example.demo.dtos.EmployeeDTO;
+import com.example.demo.dtos.employee.EmployeeCreationDTO;
+import com.example.demo.dtos.employee.EmployeeDTO;
+import com.example.demo.dtos.employee.EmployeeResponseDTO;
 import com.example.demo.entities.Employee;
 import com.example.demo.enums.Jobs;
 import com.example.demo.mappers.CompanyMapper;
@@ -27,7 +29,7 @@ public class EmployeeMapperImpl implements EmployeeMapper {
             return null;
         }
 
-        EmployeeDTO employeeDTO = new EmployeeDTO();
+        EmployeeResponseDTO employeeDTO = new EmployeeResponseDTO();
         employeeDTO.setName(employee.getName());
         employeeDTO.setSurname(employee.getSurname());
         employeeDTO.setSalary(employee.getSalary() != null ? employee.getSalary().toString() : null);

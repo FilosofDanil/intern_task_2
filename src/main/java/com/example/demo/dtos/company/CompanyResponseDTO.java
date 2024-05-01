@@ -1,6 +1,5 @@
-package com.example.demo.dtos;
+package com.example.demo.dtos.company;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,9 +10,6 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CompanyDTO {
-    @NotBlank(message = "Name is mandatory")
-    String name;
-    String country;
-    String foundationDate;
+public class CompanyResponseDTO extends CompanyDTO{
+    String selfLink;
 }

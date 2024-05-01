@@ -1,6 +1,6 @@
 package com.example.demo.services.impl;
 
-import com.example.demo.dtos.EmployeeDTO;
+import com.example.demo.dtos.employee.EmployeeDTO;
 import com.example.demo.dtos.Statistic;
 import com.example.demo.entities.Company;
 import com.example.demo.entities.Employee;
@@ -20,6 +20,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,13 +43,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     Validator validator;
 
+    ObjectMapper objectMapper;
+
     @Override
     public Statistic uploadEmployeeJSON(MultipartFile file) {
         log.info("Started reading file with name: " + file.getOriginalFilename()
                 + " and with approximate size(in bytes): " + file.getSize());
         Statistic statistic = new Statistic();
         try (InputStream inputStream = file.getInputStream()) {
-            ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule());
             JsonFactory jsonFactory = new JsonFactory();
 
@@ -74,9 +77,17 @@ public class EmployeeServiceImpl implements EmployeeService {
                 }
             }
         } catch (IOException e) {
+            e.printStackTrace();
             log.error(e.getMessage());
         }
         return statistic;
+    }
+
+    @Override
+    public Page<EmployeeDTO> getAllEmployeesWithPagination(Long companyId, String name, String surname, Long salary, Pageable pageable) {
+        return employeeRepository
+                .getAllEmployeePages(companyId, name, surname, salary, pageable)
+                .map(employeeMapper::toDto);
     }
 
     private void insertRowInDatabase(EmployeeDTO employeeDTO) {

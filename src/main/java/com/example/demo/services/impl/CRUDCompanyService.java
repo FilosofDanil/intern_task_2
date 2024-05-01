@@ -1,6 +1,6 @@
 package com.example.demo.services.impl;
 
-import com.example.demo.dtos.CompanyDTO;
+import com.example.demo.dtos.company.CompanyDTO;
 import com.example.demo.entities.Company;
 import com.example.demo.exceptions.NoContentPresentException;
 import com.example.demo.exceptions.ResourceNotFoundException;
