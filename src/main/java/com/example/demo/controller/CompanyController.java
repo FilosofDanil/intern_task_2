@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dtos.CompanyDTO;
 import com.example.demo.services.CRUDService;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -29,7 +30,7 @@ public class CompanyController {
     }
 
     @PostMapping("")
-    public ResponseEntity<CompanyDTO> createCompany(@RequestBody CompanyDTO companyDTO) {
+    public ResponseEntity<CompanyDTO> createCompany(@Valid @RequestBody CompanyDTO companyDTO) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(companyCrudService.create(companyDTO));
     }
