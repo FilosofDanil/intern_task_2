@@ -8,3 +8,7 @@ spring:
     password: postgres
   jpa:
     show-sql: true
+  springfox:
+    documentation:
+     swagger-ui:
+        enabled: true
