@@ -1,6 +1,8 @@
 package com.example.demo.services.impl;
 
 import com.example.demo.entities.Employee;
+import com.example.demo.exceptions.CompanyNotFoundException;
+import com.example.demo.repositories.CompanyRepository;
 import com.example.demo.repositories.EmployeeRepository;
 import com.example.demo.services.ReportGenerator;
 import lombok.AccessLevel;
@@ -30,9 +32,36 @@ import java.util.List;
 public class ReportGeneratorImpl implements ReportGenerator {
     EmployeeRepository employeeRepository;
 
+    CompanyRepository companyRepository;
+
     public ByteArrayInputStream generateReport(Long companyId, String name,
                                                String surname, Long salaryFrom, Long salaryTo) {
         final CSVFormat format = CSVFormat.DEFAULT.withQuoteMode(CSVFormat.EXCEL.getQuoteMode());
+        if(companyId!=null){
+            if(!companyRepository.existsById(companyId)){
+                throw new CompanyNotFoundException("No company present with id: " + companyId);
+            }
+        }
+
+        if(salaryFrom!=null ){
+            if (salaryFrom < 0) {
+                throw new IllegalArgumentException("Salary may not be negative");
+            }
+        }
+
+        if(salaryTo!=null ){
+            if (salaryTo < 0) {
+                throw new IllegalArgumentException("Salary may not be negative");
+            }
+        }
+
+        if(salaryFrom!=null && salaryTo!=null){
+            if (salaryTo <= salaryFrom) {
+                throw new IllegalArgumentException("Salary from should be less than salary To");
+            }
+        }
+
+
         List<Employee> employees = employeeRepository
                 .getAllEmployeeWithFilters(companyId, name, surname, salaryFrom, salaryTo);
         ByteArrayOutputStream out = new ByteArrayOutputStream();

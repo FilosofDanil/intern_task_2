@@ -7,6 +7,9 @@ import lombok.experimental.FieldDefaults;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Entity class representing a company.
+ */
 @Entity
 @Table(name = "companies")
 @Getter

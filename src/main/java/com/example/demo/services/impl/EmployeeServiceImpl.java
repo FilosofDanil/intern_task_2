@@ -4,6 +4,7 @@ import com.example.demo.dtos.employee.EmployeeDTO;
 import com.example.demo.dtos.Statistic;
 import com.example.demo.entities.Company;
 import com.example.demo.entities.Employee;
+import com.example.demo.exceptions.CompanyNotFoundException;
 import com.example.demo.mappers.EmployeeMapper;
 import com.example.demo.repositories.CompanyRepository;
 import com.example.demo.repositories.EmployeeRepository;
@@ -51,7 +52,6 @@ public class EmployeeServiceImpl implements EmployeeService {
                 + " and with approximate size(in bytes): " + file.getSize());
         Statistic statistic = new Statistic();
         try (InputStream inputStream = file.getInputStream()) {
-            objectMapper.registerModule(new JavaTimeModule());
             JsonFactory jsonFactory = new JsonFactory();
 
             try (JsonParser parser = jsonFactory.createParser(inputStream)) {
@@ -75,9 +75,10 @@ public class EmployeeServiceImpl implements EmployeeService {
                                 .getUnsuccessfullyWrittenRows() + 1);
                     }
                 }
+            } catch (Exception exception) {
+                log.error(exception.getMessage());
             }
         } catch (IOException e) {
-            e.printStackTrace();
             log.error(e.getMessage());
         }
         return statistic;
@@ -86,6 +87,26 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Page<EmployeeDTO> getAllEmployeesWithPagination(Long companyId, String name, String surname,
                                                            Long salaryFrom, Long salaryTo, Pageable pageable) {
+        if(companyId!=null){
+            if(!companyRepository.existsById(companyId)){
+                throw new CompanyNotFoundException("No company present with id: " + companyId);
+            }
+        }
+        if(salaryFrom!=null ){
+            if (salaryFrom < 0) {
+                throw new IllegalArgumentException("Salary may not be negative");
+            }
+        }
+        if(salaryTo!=null ){
+            if (salaryTo < 0) {
+                throw new IllegalArgumentException("Salary may not be negative");
+            }
+        }
+        if(salaryFrom!=null && salaryTo!=null){
+            if (salaryTo <= salaryFrom) {
+                throw new IllegalArgumentException("Salary from should be less than salary To");
+            }
+        }
         return employeeRepository
                 .getAllEmployeePages(companyId, name, surname, salaryFrom, salaryTo, pageable)
                 .map(employeeMapper::toDto);

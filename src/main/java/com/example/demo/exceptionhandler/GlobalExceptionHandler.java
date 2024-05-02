@@ -8,43 +8,90 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+
+/**
+ * Global exception handler to handle custom exceptions.
+ */
 @RestControllerAdvice
-public class ExceptionHandler extends ResponseEntityExceptionHandler {
-    @org.springframework.web.bind.annotation.ExceptionHandler(ResourceNotFoundException.class)
+public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+
+    /**
+     * Handles ResourceNotFoundException and returns appropriate ResponseEntity.
+     *
+     * @param ex The ResourceNotFoundException
+     * @return ResponseEntity with appropriate status code and message
+     */
+    @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundException ex) {
         return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
-    @org.springframework.web.bind.annotation.ExceptionHandler(NoContentPresentException.class)
+    /**
+     * Handles NoContentPresentException and returns appropriate ResponseEntity.
+     *
+     * @param ex The NoContentPresentException
+     * @return ResponseEntity with appropriate status code and message
+     */
+    @ExceptionHandler(NoContentPresentException.class)
     public ResponseEntity<Object> handleNoContentPresentException(NoContentPresentException ex) {
         return buildResponseEntity(HttpStatus.NO_CONTENT, ex.getMessage());
     }
 
-    @org.springframework.web.bind.annotation.ExceptionHandler(InvalidDateFormatException.class)
-    public ResponseEntity<Object> handleInvalidDateException(InvalidDateFormatException ex) {
+    /**
+     * Handles DateTimeException and returns appropriate ResponseEntity.
+     *
+     * @param ex The DateTimeException
+     * @return ResponseEntity with appropriate status code and message
+     */
+    @ExceptionHandler(DateTimeException.class)
+    public ResponseEntity<Object> handleInvalidDateException(DateTimeException ex) {
         return buildResponseEntity(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
-    @org.springframework.web.bind.annotation.ExceptionHandler(JobNotPresentException.class)
+    /**
+     * Handles JobNotPresentException and returns appropriate ResponseEntity.
+     *
+     * @param ex The JobNotPresentException
+     * @return ResponseEntity with appropriate status code and message
+     */
+    @ExceptionHandler(JobNotPresentException.class)
     public ResponseEntity<Object> handleJobNotPresentException(JobNotPresentException ex) {
         return buildResponseEntity(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
-    @org.springframework.web.bind.annotation.ExceptionHandler(CompanyNotFoundException.class)
+    /**
+     * Handles CompanyNotFoundException and returns appropriate ResponseEntity.
+     *
+     * @param ex The CompanyNotFoundException
+     * @return ResponseEntity with appropriate status code and message
+     */
+    @ExceptionHandler(CompanyNotFoundException.class)
     public ResponseEntity<Object> handleCompanyNotFoundException(CompanyNotFoundException ex) {
         return buildResponseEntity(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
+    /**
+     * Handles IllegalArgumentException and returns appropriate ResponseEntity.
+     *
+     * @param ex The IllegalArgumentException
+     * @return ResponseEntity with appropriate status code and message
+     */
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Object> handleCompanyNotFoundException(IllegalArgumentException ex) {
+        return buildResponseEntity(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
 
     private ResponseEntity<Object> buildResponseEntity(HttpStatus status, String message) {
         Map<String, Object> body = new LinkedHashMap<>();

@@ -2,8 +2,10 @@ package com.example.demo.dtos;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.springframework.stereotype.Service;
 
+/**
+ * DTO class for representing upload statistics.
+ */
 @Getter
 @Setter
 @AllArgsConstructor

@@ -1,11 +1,11 @@
 package com.example.demo.dtos.company;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+/**
+ * DTO class for representing company information.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

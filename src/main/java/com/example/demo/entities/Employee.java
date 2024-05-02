@@ -8,6 +8,9 @@ import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
 
+/**
+ * Entity class representing an employee.
+ */
 @Entity
 @Table(name = "employees")
 @Getter
