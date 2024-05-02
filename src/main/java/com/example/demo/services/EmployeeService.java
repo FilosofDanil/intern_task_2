@@ -10,5 +10,5 @@ public interface EmployeeService {
     Statistic uploadEmployeeJSON(MultipartFile file);
 
     Page<EmployeeDTO> getAllEmployeesWithPagination(Long companyId, String name,
-                                                    String surname,  Long salary, Pageable pageable);
+                                                    String surname,  Long salaryFrom, Long salaryTo, Pageable pageable);
 }

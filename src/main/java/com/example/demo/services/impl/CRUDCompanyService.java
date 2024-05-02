@@ -48,8 +48,8 @@ public class CRUDCompanyService implements CRUDService<CompanyDTO> {
     @Override
     public CompanyDTO create(CompanyDTO companyDTO) {
         log.info("Creating new company.");
-        companyRepository.save(companyMapper.toEntity(companyDTO));
-        return companyDTO;
+        Company savedCompany = companyRepository.save(companyMapper.toEntity(companyDTO));
+        return companyMapper.toDto(savedCompany);
     }
 
     @Transactional

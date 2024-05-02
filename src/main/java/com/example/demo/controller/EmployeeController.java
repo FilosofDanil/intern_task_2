@@ -60,20 +60,23 @@ public class EmployeeController {
     public Page<EmployeeDTO> getAllEmployeesWithPagination(@RequestParam(required = false) Long companyId,
                                                            @RequestParam(required = false) String name,
                                                            @RequestParam(required = false) String surname,
-                                                           @RequestParam(required = false) Long salary,
+                                                           @RequestParam(required = false) Long salaryFrom,
+                                                           @RequestParam(required = false) Long salaryTo,
                                                            @RequestParam(defaultValue = "0") Integer page,
                                                            @RequestParam(defaultValue = "5") Integer size) {
         Pageable pageable = PageRequest.of(page, size);
-        return employeeService.getAllEmployeesWithPagination(companyId, name, surname, salary, pageable);
+        return employeeService.getAllEmployeesWithPagination(companyId, name, surname, salaryFrom, salaryTo, pageable);
     }
 
     @GetMapping("/_report")
     public ResponseEntity<InputStreamResource> generateReport(
-            @RequestParam(name = "entity2Id", required = false) Long entity2Id,
-            @RequestParam(name = "name", required = false) String name,
-            @RequestParam(name = "surname", required = false) String surname) {
+            @RequestParam(required = false) Long companyId,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String surname,
+            @RequestParam(required = false) Long salaryFrom,
+            @RequestParam(required = false) Long salaryTo) {
         String fileName = "employees_report.csv";
-        ByteArrayInputStream in = reportGenerator.generateReport();
+        ByteArrayInputStream in = reportGenerator.generateReport(companyId, name, surname, salaryFrom, salaryTo);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Disposition", "attachment; filename=" + fileName);
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);

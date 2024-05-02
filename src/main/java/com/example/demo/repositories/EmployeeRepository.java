@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
@@ -50,12 +51,28 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
             "WHERE (:companyId IS NULL OR e.company.id = :companyId) " +
             "AND (:name IS NULL OR e.name = :name) " +
             "AND (:surname IS NULL OR e.surname = :surname) " +
-            "AND (:salary IS NULL OR e.salary = :salary)")
+            "AND (:salaryFrom IS NULL OR e.salary >= :salaryFrom) " +
+            "AND (:salaryTo IS NULL OR e.salary <= :salaryTo)")
     Page<Employee> getAllEmployeePages(
             @Param("companyId") Long companyId,
             @Param("name") String name,
             @Param("surname") String surname,
-            @Param("salary") Long salary,
+            @Param("salaryFrom") Long salaryFrom,
+            @Param("salaryTo") Long salaryTo,
             Pageable pageable
+    );
+
+    @Query("SELECT e FROM Employee e " +
+            "WHERE (:companyId IS NULL OR e.company.id = :companyId) " +
+            "AND (:name IS NULL OR e.name = :name) " +
+            "AND (:surname IS NULL OR e.surname = :surname) " +
+            "AND (:salaryFrom IS NULL OR e.salary >= :salaryFrom) " +
+            "AND (:salaryTo IS NULL OR e.salary <= :salaryTo)")
+    List<Employee> getAllEmployeeWithFilters(
+            @Param("companyId") Long companyId,
+            @Param("name") String name,
+            @Param("surname") String surname,
+            @Param("salaryFrom") Long salaryFrom,
+            @Param("salaryTo") Long salaryTo
     );
 }

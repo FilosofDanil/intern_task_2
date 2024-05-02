@@ -84,9 +84,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Page<EmployeeDTO> getAllEmployeesWithPagination(Long companyId, String name, String surname, Long salary, Pageable pageable) {
+    public Page<EmployeeDTO> getAllEmployeesWithPagination(Long companyId, String name, String surname,
+                                                           Long salaryFrom, Long salaryTo, Pageable pageable) {
         return employeeRepository
-                .getAllEmployeePages(companyId, name, surname, salary, pageable)
+                .getAllEmployeePages(companyId, name, surname, salaryFrom, salaryTo, pageable)
                 .map(employeeMapper::toDto);
     }
 

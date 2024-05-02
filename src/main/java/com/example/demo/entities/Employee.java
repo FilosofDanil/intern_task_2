@@ -16,7 +16,13 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Employee extends BaseEntity {
+public class Employee {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "employee_seq")
+    @SequenceGenerator(name = "employee_seq", sequenceName = "employee_seq", allocationSize = 1)
+    @Column(name = "id", nullable = false)
+    Long id;
+
     @Column(name = "employee_name", nullable = false)
     String name;
 

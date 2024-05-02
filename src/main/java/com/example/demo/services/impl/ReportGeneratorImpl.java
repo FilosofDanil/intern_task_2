@@ -30,9 +30,11 @@ import java.util.List;
 public class ReportGeneratorImpl implements ReportGenerator {
     EmployeeRepository employeeRepository;
 
-    public ByteArrayInputStream generateReport()  {
+    public ByteArrayInputStream generateReport(Long companyId, String name,
+                                               String surname, Long salaryFrom, Long salaryTo) {
         final CSVFormat format = CSVFormat.DEFAULT.withQuoteMode(CSVFormat.EXCEL.getQuoteMode());
-        List<Employee> employees = employeeRepository.findAll();
+        List<Employee> employees = employeeRepository
+                .getAllEmployeeWithFilters(companyId, name, surname, salaryFrom, salaryTo);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try (CSVPrinter csvPrinter = new CSVPrinter(new OutputStreamWriter(out, StandardCharsets.UTF_8), format)) {
             csvPrinter.printRecord("Name", "Surname", "Salary", "Hiring Date", "Job", "Company");
@@ -48,6 +50,7 @@ public class ReportGeneratorImpl implements ReportGenerator {
             }
 
             csvPrinter.flush();
+
         } catch (IOException e) {
             log.error("Something went wrong on server. " + e.getMessage());
         }
