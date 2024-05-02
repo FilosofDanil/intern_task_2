@@ -266,7 +266,7 @@ class EmployeeControllerTest {
             Page<EmployeeDTO> employeeDTOPage = new PageImpl<>(employeeDTOList);
             when(employeeService.getAllEmployeesWithPagination(eq(1L), eq("Danylo"), eq("Berkovskyi"), eq(40000L), eq(70000L), eq(pageable)))
                     .thenReturn(employeeDTOPage);
-            mockMvc.perform(get("/api/employee/_list")
+            mockMvc.perform(post("/api/employee/_list")
                             .param("page", Integer.toString(page))
                             .param("size", Integer.toString(size)).param("companyId", "1")
                             .param("name", "Danylo")

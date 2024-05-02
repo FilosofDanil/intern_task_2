@@ -92,7 +92,7 @@ public class EmployeeController {
      * @param size       The number of employees per page
      * @return Page of EmployeeDTOs
      */
-    @GetMapping("/_list")
+    @PostMapping("/_list")
     public Page<EmployeeDTO> getAllEmployeesWithPagination(@RequestParam(required = false) Long companyId,
                                                            @RequestParam(required = false) String name,
                                                            @RequestParam(required = false) String surname,

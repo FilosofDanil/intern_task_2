@@ -22,6 +22,11 @@ Entities:
 - The main fields which describe Employee: name, surname, companyName, hiringDate, salary, jobs
 - Jobs are considered as enum variable and every employee might be hired for different positions
 
+Endpoints:
+Company Resource:
+![](img/it2.jpg)
+Employee Resource:
+![](img/it3.jpg)
 <h3>4. Input and output examples(JSON)</h3>
 Here  is provided examples of JSONs and JSON file with test data for company and employee endpoints:
 
@@ -56,7 +61,7 @@ JSON file, which may be uploaded on employee API endpoint:
     {
         "name": "Daniil",
         "surname": "NoBerk",
-        "salary": "1488",
+        "salary": "2000",
         "hiringDate": "2024-04-26",
         "job": "SALES",
         "company": {
@@ -68,7 +73,7 @@ JSON file, which may be uploaded on employee API endpoint:
    {
         "name": "Daniil",
         "surname": "NoBerk",
-        "salary": "1488",
+        "salary": "2000",
         "hiringDate": "2024-04-26",
         "job": "SALES"
     }
