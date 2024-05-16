@@ -96,7 +96,7 @@ class CRUDEmployeeServiceTest {
 
     @Test
     void createEmployee() {
-        EmployeeDTO newEmployee = new EmployeeDTO("Danylo", "Berkovskyi","50000","2024-04-28", "DEVOPS",
+        EmployeeDTO newEmployee = new EmployeeDTO(1L,"Danylo", "Berkovskyi","50000","2024-04-28", "DEVOPS",
                 new CompanyDTO("Company3", "Ukraine", "2024-04-28"));
         when(employeeMapper.toDto(any(Employee.class))).thenReturn(newEmployee);
         when(employeeMapper.toEntity(any(EmployeeDTO.class))).thenCallRealMethod();
@@ -121,7 +121,7 @@ class CRUDEmployeeServiceTest {
     void createEmployeeInvalidDate() {
         when(employeeMapper.toEntity(any(EmployeeDTO.class))).thenCallRealMethod();
         when(companyRepository.existsByName(anyString())).thenReturn(true);
-        EmployeeDTO newEmployee = new EmployeeDTO("Danylo", "Berkovskyi","50000","failure", "DEVOPS",
+        EmployeeDTO newEmployee = new EmployeeDTO(1l,"Danylo", "Berkovskyi","50000","failure", "DEVOPS",
                 new CompanyDTO("Company3", "Ukraine", "2024-04-28"));
         DateTimeParseException exception = assertThrows(DateTimeParseException.class, () ->
                 crudEmployeeService.create(newEmployee));
@@ -131,7 +131,7 @@ class CRUDEmployeeServiceTest {
     @Test
     void createEmployeeInvalidJob() {
         when(companyRepository.existsByName(anyString())).thenReturn(true);
-        EmployeeDTO newEmployee = new EmployeeDTO("Danylo", "Berkovskyi","50000","2024-04-28", "failure",
+        EmployeeDTO newEmployee = new EmployeeDTO(1l,"Danylo", "Berkovskyi","50000","2024-04-28", "failure",
                 new CompanyDTO("Company3", "Ukraine", "2024-04-28"));
         JobNotPresentException exception = assertThrows(JobNotPresentException.class, () ->
                 crudEmployeeService.create(newEmployee));
@@ -140,7 +140,7 @@ class CRUDEmployeeServiceTest {
 
     @Test
     void createCompanyInvalidCompany() {
-        EmployeeDTO newEmployee = new EmployeeDTO("Danylo", "Berkovskyi","50000","failure", "DEVOPS",
+        EmployeeDTO newEmployee = new EmployeeDTO(1l,"Danylo", "Berkovskyi","50000","failure", "DEVOPS",
                 new CompanyDTO());
         CompanyNotFoundException exception = assertThrows(CompanyNotFoundException.class, () ->
                 crudEmployeeService.create(newEmployee));
@@ -153,7 +153,7 @@ class CRUDEmployeeServiceTest {
         when(employeeMapper.toEntity(any())).thenCallRealMethod();
         when(employeeRepository.existsById(1L)).thenReturn(true);
         when(companyRepository.existsByName(anyString())).thenReturn(true);
-        EmployeeDTO newEmployee = new EmployeeDTO("Danylo", "Berkovskyi","50000","2024-04-28", "DEVOPS",
+        EmployeeDTO newEmployee = new EmployeeDTO(1l,"Danylo", "Berkovskyi","50000","2024-04-28", "DEVOPS",
                 new CompanyDTO("Company3", "Ukraine", "2024-04-28"));
         crudEmployeeService.update(newEmployee, 1L);
         verify(employeeRepository).updateEmployee(
@@ -161,7 +161,7 @@ class CRUDEmployeeServiceTest {
                 eq(newEmployee.getName()),
                 eq(newEmployee.getSurname()),
                 eq(Integer.valueOf(newEmployee.getSalary())),
-                eq(LocalDate.parse(newEmployee.getHiringDate())),
+                eq(newEmployee.getHiringDate()),
                 eq(newEmployee.getJob()),
                 eq(newEmployee.getCompany().getName())
         );
@@ -169,7 +169,7 @@ class CRUDEmployeeServiceTest {
 
     @Test
     void updateEmployeeNotFound() {
-        EmployeeDTO newEmployee = new EmployeeDTO("Danylo", "Berkovskyi","50000","2024-04-28", "DEVOPS",
+        EmployeeDTO newEmployee = new EmployeeDTO(1l,"Danylo", "Berkovskyi","50000","2024-04-28", "DEVOPS",
                 new CompanyDTO("Company3", "Ukraine", "2024-04-28"));
 
         when(employeeRepository.existsById(anyLong())).thenReturn(false);

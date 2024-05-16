@@ -46,7 +46,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
      */
     @ExceptionHandler(NoContentPresentException.class)
     public ResponseEntity<Object> handleNoContentPresentException(NoContentPresentException ex) {
-        return buildResponseEntity(HttpStatus.NO_CONTENT, ex.getMessage());
+        return buildResponseEntity(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
     /**

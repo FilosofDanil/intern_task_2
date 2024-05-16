@@ -88,7 +88,7 @@ public class CRUDEmployeeService implements CRUDService<EmployeeDTO> {
             }
         }
         employeeRepository.updateEmployee(id, employee.getName(), employee.getSurname(),
-                employee.getSalary(), employee.getHiringDate(), employeeDTO.getJob(),
+                employee.getSalary(), employeeDTO.getHiringDate(), employeeDTO.getJob(),
                 company.map(Company::getName).orElse(null));
     }
 
