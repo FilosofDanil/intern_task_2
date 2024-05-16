@@ -38,8 +38,8 @@ public class EmployeeCreationDTO extends EmployeeDTO {
      * @param job         The job of the employee
      * @param company     The company the employee belongs to
      */
-    public EmployeeCreationDTO(String name, String surname, String salary, String hiringDate, String job, CompanyDTO company) {
-        super(name, surname, salary, hiringDate, job, company);
+    public EmployeeCreationDTO(Long id, String name, String surname, String salary, String hiringDate, String job, CompanyDTO company) {
+        super(id, name, surname, salary, hiringDate, job, company);
         this.name = name;
         this.surname = surname;
         this.salary = salary;

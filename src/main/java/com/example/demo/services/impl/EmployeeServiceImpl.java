@@ -107,6 +107,12 @@ public class EmployeeServiceImpl implements EmployeeService {
                 throw new IllegalArgumentException("Salary from should be less than salary To");
             }
         }
+        if(name.isBlank()){
+            name = null;
+        }
+        if(surname.isBlank()){
+            surname = null;
+        }
         return employeeRepository
                 .getAllEmployeePages(companyId, name, surname, salaryFrom, salaryTo, pageable)
                 .map(employeeMapper::toDto);

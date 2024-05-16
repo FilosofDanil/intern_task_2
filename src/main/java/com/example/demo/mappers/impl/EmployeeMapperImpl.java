@@ -30,6 +30,7 @@ public class EmployeeMapperImpl implements EmployeeMapper {
         }
 
         EmployeeResponseDTO employeeDTO = new EmployeeResponseDTO();
+        employeeDTO.setId(employee.getId());
         employeeDTO.setName(employee.getName());
         employeeDTO.setSurname(employee.getSurname());
         employeeDTO.setSalary(employee.getSalary() != null ? employee.getSalary().toString() : null);

@@ -63,9 +63,9 @@ class EmployeeControllerTest {
     @BeforeEach
     public void setUp() {
         employeeDTOList = new ArrayList<>();
-        employeeDTOList.add(new EmployeeDTO("Danylo", "Berkovskyi", "50000", "2024-04-28", "Developer",
+        employeeDTOList.add(new EmployeeDTO(1L, "Danylo", "Berkovskyi", "50000", "2024-04-28", "Developer",
                 new CompanyDTO("Company1", "Ukraine", "2024-04-28")));
-        employeeDTOList.add(new EmployeeDTO("Jane", "Smith", "60000", "2024-04-28", "Manager",
+        employeeDTOList.add(new EmployeeDTO(2L, "Jane", "Smith", "60000", "2024-04-28", "Manager",
                 new CompanyDTO("Company2", "Germany", "2024-04-28")));
     }
 
@@ -125,8 +125,8 @@ class EmployeeControllerTest {
         @Test
         public void createEmployee() throws Exception {
             EmployeeCreationDTO newEmployee =
-                    new EmployeeCreationDTO("Danylo", "Berkovskyi", "50000", "2024-04-28", "Developer", new CompanyDTO("Company1", "Ukraine", "2024-04-28"));
-            EmployeeDTO returnedValue = new EmployeeDTO("Danylo", "Berkovskyi", "50000", "2024-04-28", "Developer", new CompanyDTO("Company1", "Ukraine", "2024-04-28"));
+                    new EmployeeCreationDTO(1L,"Danylo", "Berkovskyi", "50000", "2024-04-28", "Developer", new CompanyDTO("Company1", "Ukraine", "2024-04-28"));
+            EmployeeDTO returnedValue = new EmployeeDTO(1L,"Danylo", "Berkovskyi", "50000", "2024-04-28", "Developer", new CompanyDTO("Company1", "Ukraine", "2024-04-28"));
             when(employeeCrudService.create(any(EmployeeCreationDTO.class)))
                     .thenReturn(returnedValue);
             String newContentJson = objectMapper.writeValueAsString(newEmployee);
@@ -147,7 +147,7 @@ class EmployeeControllerTest {
         @Test
         public void createEmployeeInvalidName() throws Exception {
             EmployeeCreationDTO newEmployee =
-                    new EmployeeCreationDTO("", "Berkovskyi", "50000", "2024-04-28", "Developer", new CompanyDTO("Company1", "Ukraine", "2024-04-28"));
+                    new EmployeeCreationDTO(1L, "", "Berkovskyi", "50000", "2024-04-28", "Developer", new CompanyDTO("Company1", "Ukraine", "2024-04-28"));
             String newContentJson = objectMapper.writeValueAsString(newEmployee);
             mockMvc.perform(MockMvcRequestBuilders.post("/api/employee")
                             .contentType(MediaType.APPLICATION_JSON)
@@ -160,7 +160,7 @@ class EmployeeControllerTest {
         @Test
         public void createEmployeeInvalidSurname() throws Exception {
             EmployeeCreationDTO newEmployee =
-                    new EmployeeCreationDTO("Danylo", "", "50000", "2024-04-28", "Developer", new CompanyDTO("Company1", "Ukraine", "2024-04-28"));
+                    new EmployeeCreationDTO(1L,"Danylo", "", "50000", "2024-04-28", "Developer", new CompanyDTO("Company1", "Ukraine", "2024-04-28"));
             String newContentJson = objectMapper.writeValueAsString(newEmployee);
             mockMvc.perform(MockMvcRequestBuilders.post("/api/employee")
                             .contentType(MediaType.APPLICATION_JSON)
@@ -173,7 +173,7 @@ class EmployeeControllerTest {
         @Test
         public void createEmployeeInvalidSalary() throws Exception {
             EmployeeCreationDTO newEmployee =
-                    new EmployeeCreationDTO("Danylo", "Berkovskyi", "-1000", "2024-04-28", "Developer", new CompanyDTO("Company1", "Ukraine", "2024-04-28"));
+                    new EmployeeCreationDTO(1L, "Danylo", "Berkovskyi", "-1000", "2024-04-28", "Developer", new CompanyDTO("Company1", "Ukraine", "2024-04-28"));
             String newContentJson = objectMapper.writeValueAsString(newEmployee);
             mockMvc.perform(MockMvcRequestBuilders.post("/api/employee")
                             .contentType(MediaType.APPLICATION_JSON)
@@ -186,7 +186,7 @@ class EmployeeControllerTest {
         @Test
         public void createEmployeeInvalidCompany() throws Exception {
             EmployeeCreationDTO newEmployee =
-                    new EmployeeCreationDTO("Danylo", "Berkovskyi", "50000", "2024-04-28", "Developer", null);
+                    new EmployeeCreationDTO(1L,"Danylo", "Berkovskyi", "50000", "2024-04-28", "Developer", null);
             String newContentJson = objectMapper.writeValueAsString(newEmployee);
             mockMvc.perform(MockMvcRequestBuilders.post("/api/employee")
                             .contentType(MediaType.APPLICATION_JSON)
@@ -204,7 +204,7 @@ class EmployeeControllerTest {
         @Test
         public void updateEmployee() throws Exception {
             EmployeeDTO updatedEmployee =
-                    new EmployeeDTO("Danylo", "Berkovskyi", "50000", "2024-04-28", "Developer", new CompanyDTO("Company1", "Ukraine", "2024-04-28"));
+                    new EmployeeDTO(1L,"Danylo", "Berkovskyi", "50000", "2024-04-28", "Developer", new CompanyDTO("Company1", "Ukraine", "2024-04-28"));
             String newContentJson = objectMapper.writeValueAsString(updatedEmployee);
             mockMvc.perform(put("/api/employee/1")
                             .contentType(MediaType.APPLICATION_JSON)
@@ -216,7 +216,7 @@ class EmployeeControllerTest {
         public void updateEmployeeNotFound() throws Exception {
             String message = "Cannot find employee with id: 3";
             EmployeeDTO updatedEmployee =
-                    new EmployeeDTO("Danylo", "Berkovskyi", "50000", "2024-04-28", "Developer", new CompanyDTO("Company1", "Ukraine", "2024-04-28"));
+                    new EmployeeDTO(1L,"Danylo", "Berkovskyi", "50000", "2024-04-28", "Developer", new CompanyDTO("Company1", "Ukraine", "2024-04-28"));
             String newContentJson = objectMapper.writeValueAsString(updatedEmployee);
             doAnswer((Answer<Void>) invocation -> {
                 throw new ResourceNotFoundException(message);

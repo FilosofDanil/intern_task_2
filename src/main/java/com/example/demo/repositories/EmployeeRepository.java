@@ -30,20 +30,21 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
      * @param companyName The new company name for the employee (nullable)
      */
     @Modifying
-    @Query(value = "UPDATE employees SET employee_name = CASE WHEN :name IS NOT NULL THEN :name ELSE employee_name END," +
-            "    employee_surname = CASE WHEN :surname IS NOT NULL THEN :surname ELSE employee_surname END," +
-            "    salary = CASE WHEN :salary IS NOT NULL THEN :salary ELSE salary END," +
-            "    hiring_date = CASE WHEN :hiringDate IS NOT NULL THEN :hiringDate ELSE hiring_date END," +
-            "    job = CASE WHEN :job IS NOT NULL THEN :job ELSE job END," +
-            "    company_id = CASE WHEN :companyName IS NOT NULL" +
-            " THEN (SELECT id FROM companies WHERE company_name = :companyName) ELSE company_id END " +
+    @Query(value = "UPDATE employees SET " +
+            "employee_name = CASE WHEN :name IS NOT NULL THEN :name ELSE employee_name END, " +
+            "employee_surname = CASE WHEN :surname IS NOT NULL THEN :surname ELSE employee_surname END, " +
+            "salary = CASE WHEN :salary IS NOT NULL THEN :salary ELSE salary END, " +
+            "hiring_date = CASE WHEN :hiringDate IS NOT NULL THEN CAST(:hiringDate AS timestamp) ELSE hiring_date END, " +
+            "job = CASE WHEN :job IS NOT NULL THEN :job ELSE job END, " +
+            "company_id = CASE WHEN :companyName IS NOT NULL " +
+            "THEN (SELECT id FROM companies WHERE company_name = :companyName) ELSE company_id END " +
             "WHERE id = :id",
             nativeQuery = true)
     void updateEmployee(@Param("id") Long id,
                         @Param("name") String name,
                         @Param("surname") String surname,
                         @Param("salary") Integer salary,
-                        @Param("hiringDate") LocalDate hiringDate,
+                        @Param("hiringDate") String hiringDate,
                         @Param("job") String job,
                         @Param("companyName") String companyName);
 
